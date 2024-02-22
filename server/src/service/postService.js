@@ -35,14 +35,12 @@ const create = async(user, request) => {
 
 
 
-const get = async(user, postId) => {
-    const profileId = await profileUser(user)
+const get = async( postId) => {
     postId = validate(getPostValidation, postId)
     
     const post = await prismaClient.post.findFirst({
         where : {
             id : postId,
-            profile_id : profileId.id
         },
         select : {
             id: true,

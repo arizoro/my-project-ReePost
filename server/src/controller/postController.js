@@ -25,12 +25,8 @@ const create = async(req, res, next) => {
 
 const get = async(req, res, next) => {
     try {
-    const user = req.user
     const postId = req.params.postId
-
-    const result = await postService.get(user,postId)
-    result.image = `${url}${result.image}`
-    result.profile.image =  `${url}${result.profile.image}`
+    const result = await postService.get(postId)
 
     res.status(200).json({
         data: result

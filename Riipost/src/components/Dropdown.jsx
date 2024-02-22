@@ -1,6 +1,6 @@
 import useAuth from "../hooks/UseAuth";
 
-const Dropdown = () => {
+const Dropdown = ({onMouseOut}) => {
   const { token} = useAuth()
 
   const handleLogout = async () => {
@@ -25,7 +25,7 @@ const Dropdown = () => {
     <>
     {
       !token ? null :
-        <div className=" w-56 right-0 absolute">
+        <div className=" w-56 right-0 absolute" onMouseLeave={onMouseOut} >
           <ul className="p-2 flex flex-col bg-black">
             <button className="border-white text-white border-2 p-1 rounded my-2">
               Dashboard

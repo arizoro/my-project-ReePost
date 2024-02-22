@@ -69,7 +69,7 @@ const Content = ({ post, users }) => {
 
   return (
     <>
-      <div className="flex justify-center items-center relative">
+      <div className="flex justify-center items-center">
         <div className="w-8/12 ">
           <div className="flex flex-col py-6 ">
             {users?.data?.map((user, i) => {
@@ -104,7 +104,11 @@ const Content = ({ post, users }) => {
             <div className="my-4 w-full">
               <div className="flex justify-between ">
                 {post?.image ? (
-                  <img src={`${imgURL}${post.image}`} alt="img" />
+                  <img
+                    src={`${imgURL}${post.image}`}
+                    alt="img"
+                    className="w-full h-10/12 bg-cover content-center"
+                  />
                 ) : null}
 
                 {isOpen2 ? (

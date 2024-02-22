@@ -32,6 +32,10 @@ const Navbar = () => {
     setIsOpen((open) => !open);
   };
 
+  const mouseOut = () => {
+    setIsOpen(false)
+  }
+
   return (
     <>
       {!token ? null : (
@@ -56,24 +60,24 @@ const Navbar = () => {
                 />
               </button>
             </div>
-            <Link to='/profile' className="flex justify-start items-center cursor-pointer ">
+            <div className="flex justify-start items-center cursor-pointer ">
               <img
                 src={!user?.image ? nonprofile : user?.image
                 }
                 alt="img"
                 className="rounded-full object-cover object-top w-8 h-8"
               />
-              <h1 className=" font-semi-bold mx-2 text-md font-mono text-white ">
+              <Link to='/profile' className=" font-semi-bold mx-2 text-md font-mono text-white ">
                 {user?.first_name} {user?.last_name}
-              </h1>
+              </Link>
               <button onClick={handleOpen} className="text-white" type="button">
                 <CaretDown size={20} />
               </button>
-            </Link>
+            </div>
           </div>
         </div>
       )}
-      {isOpen ? <Dropdown /> : ""}
+      {isOpen ? <Dropdown onMouseOut={mouseOut} /> : ""}
     </>
   );
 };
