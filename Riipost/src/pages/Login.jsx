@@ -1,19 +1,22 @@
-import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, Navigate } from 'react-router-dom'
-import { useNavigate,useLocation } from 'react-router-dom'
-import axios from 'axios'
-import useAuth from '../hooks/UseAuth'
-
+import { useDispatch } from 'react-redux'
+import { login } from '../redux/api/auth'
+import { useSelector } from 'react-redux'
+import { getUserProfile } from '../redux/api/user'
 
 const Login = () => {
-  const {token,setAuth} = useAuth()
-  const navigate = useNavigate()
-  const location = useLocation()
-  const from = location.state?.from?.pathname || '/'
+  const token = window.localStorage.getItem('token')
+  const isLogin = useSelector((state) => state.auth.login)
+  const userProfile = useSelector((state) => state.profile.profile.data)
+
+
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [msg, setMsg] = useState('')
+
+  const dispatch = useDispatch()
 
   const data = {
     username, password
@@ -21,28 +24,18 @@ const Login = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault()
-    try {
-      
-      const loginUser = await axios.post('api/users/login', data ,
-      {
-        headers : {
-          'Content-Type'  : "application/json"
-        }
-      })
-      const token = loginUser?.data.data.token
+    dispatch(login(data))
 
-      window.localStorage.setItem('token' , token)
-
-      setAuth({username, password , token})
-      navigate(from, {replace : true})
-
-    } catch (error) {
-      if(error){
-        setMsg('Username or password invalid!')
-      }
+    if(isLogin){
+      setMsg('Email or password failed')
     }
   }
-
+  
+  useEffect(()=> {
+    if(token || userProfile){
+      dispatch(getUserProfile(token))
+    }
+  },[token])
 
   return (
     <>
@@ -51,7 +44,11 @@ const Login = () => {
       <div className='flex justify-center items-center'>
         <div className='rounded bg-slate-700 my-48'>
           <div className=' h-72 p-4 flex justify-center flex-col'>
-            <h1 className='text-white' >{msg}</h1>
+            {
+              !isLogin ? 
+              <h1 className='text-white' >{msg}</h1> 
+              : null
+            }
           <form onSubmit={handleSubmit}  className='flex flex-col justify-center w-80'>
             <div className='mb-3 flex flex-col'>
               <label htmlFor="" className='mb-1 font-bold'>Username</label>
@@ -68,8 +65,9 @@ const Login = () => {
         </div>
       </div>
     </div>
-    : <Navigate to='/' />
-    }
+    :
+    <Navigate to='/' />
+    } 
     </>
     )
   }

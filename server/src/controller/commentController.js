@@ -34,9 +34,8 @@ const get = async(req, res, next) => {
 
 const getAllComment = async(req,res,next) => {
     try {
-        const user = req.user
         const postId = req.params.postId
-        const result = await commentService.getAllComment(user,postId)
+        const result = await commentService.getAllComment(postId)
         res.status(200).json({
             data: result
         })

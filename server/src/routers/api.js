@@ -8,14 +8,14 @@ import profileController from '../controller/profileController.js'
 
 const userApi = new express.Router()
 
-userApi.use('/image', express.static('src/public/images'))
+userApi.use('/image', express.static('assets/images'))
 // middleware
 userApi.use(authUser)
 
 
 // user API
 userApi.get('/api/users/current', userController.get)
-userApi.patch('/api/users/current',upload.single('image') ,userController.update)
+userApi.patch('/api/users/current' ,userController.update)
 userApi.delete('/api/users/current', userController.logout)
 
 // profile

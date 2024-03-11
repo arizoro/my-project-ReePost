@@ -8,7 +8,7 @@ const create = async(req,res,next) => {
     try {
         const request = req.body
         const user = req.user
-        request.image = req.file.filename
+        request.image = req.file?.filename
         const result = await profileService.create(user,request)
         result.image = `${url}${result.image}`
 
@@ -50,7 +50,7 @@ const update = async(req,res,next) => {
         const user = req.user
         const request = req.body
         request.id = req.params.profileId
-        request.image = req.file.filename
+        request.image = req.file?.filename
 
         const profile = await prismaClient.profile.findFirst({
             where : {
@@ -64,7 +64,7 @@ const update = async(req,res,next) => {
         const result = await profileService.update(user, request)
         
         if(result.image){
-            fs.unlink(`src/public/images/${old_image}`)
+            fs.unlink(`assets/images/${old_image}`)
             result.image = `${url}${result.image}`
         }
 

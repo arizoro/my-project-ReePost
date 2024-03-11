@@ -182,49 +182,17 @@ const search = async(user, request) => {
 const getAllPost = async (request) => {
     request = validate(searchPostValidation , request)
     const skip = (request.page - 1) * request.size
-    const filters = []
+
+    const result = await prismaClient.post.findMany()
+    const sorting = result.sort((a,b) => new Date(b.created_at) - new Date(a.created_at) )
+    const totalItems = await prismaClient.post.count()
+
+    const slice = sorting.slice(skip , (request.page * request.size))
 
 
-    if(request.id){
-        filters.push({
-            OR : [{
-                id : request.id
-            }]
-        })
-    }
-
-    if(request.title){
-        filters.push({
-            title : {
-                contains : request.title
-            }
-        })
-    }
-
-    if(request.content){
-        filters.push({
-            content : {
-                contains : request.content
-            }
-        })
-    }
-
-    const filterPost = await prismaClient.post.findMany({
-        where : {
-            AND : filters
-        },
-        take : request.size ,
-        skip : parseInt(skip)
-        })
-
-    const totalItems = await prismaClient.post.count({
-        where : {
-            AND : filters
-        }
-    })
-
+    console.log(totalItems , '<<<<< items')
     return {
-        data : filterPost,
+        data : slice,
         pagging : {
             page : request.page,
             total_items : totalItems,

@@ -1,6 +1,5 @@
-import React from "react";
+import axios from "axios";
 import { useState } from "react";
-import { register } from "../api/api";
 import { Link } from "react-router-dom";
 
 const Daftar = () => {
@@ -19,7 +18,13 @@ const Daftar = () => {
   async function handleSubmit(e){
     e.preventDefault()
 
-    const daftar =  register('api/users', data)
+    const daftar =  await axios.post('http://localhost:3000/api/users',
+    data ,
+    {
+      headers : {
+        "Content-Type" : "application/json"
+      }
+    })
     if(daftar){
       setCreate(true)
     }

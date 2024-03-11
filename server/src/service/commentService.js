@@ -69,7 +69,7 @@ const get = async(user, postId, commentId) => {
     return commentInDb
 }
 
-const getAllComment = async(user,postId) => {
+const getAllComment = async(postId) => {
     postId = await mustBeExisst(postId)
 
     const allComment = await prismaClient.comment.findMany({

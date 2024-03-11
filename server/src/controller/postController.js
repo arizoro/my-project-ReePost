@@ -8,11 +8,9 @@ const create = async(req, res, next) => {
     try {
         const user = req.user
         const request = req.body
-        request.image = req.file.filename
-        // if(request.image){
-        //     console.log({data : request.image})
-        // }
-        // console.log({data : req.file.filename})
+        request.image = req.file?.filename
+
+
         const result = await postService.create(user, request)
         console.log(result)
         res.status(200).json({
@@ -43,7 +41,7 @@ const update = async(req, res, next)=> {
         const request = req.body
         request.id = req.params.postId
         if(request.image){
-            request.image = req.file.filename
+            request.image = req.file?.filename
         }
 
         const post = await prismaClient.post.findFirst({
@@ -57,7 +55,7 @@ const update = async(req, res, next)=> {
         const result = await postService.update(user, request)
 
         if(result.image){
-            fs.unlink(`src/public/images/${old_image}`)
+            fs.unlink(`assets/images/${old_image}`)
         }
         result.image = `${url}${result.image}`
         res.status(200).json({
@@ -73,9 +71,13 @@ const remove = async(req, res, next) => {
         const user = req.user
         const posId = req.params.postId
 
-        await postService.remove(user, posId)
+
+        const result = await postService.remove(user, posId)
+        if(result.image){
+            fs.unlink(`assets/images/${result.image}`)
+        }
         res.status(200).json({
-            data: "OK"
+            data: 'ok'
         })
     } catch (error) {
         next(error)
@@ -106,9 +108,6 @@ const search = async (req, res, next) => {
 const getAllPost = async(req,res,next) => {
     try {
         const request = {
-            id : req.query.id,
-            title : req.query.title,
-            content : req.query.content,
             page : req.query.page,
             size : req.query.size
             }
