@@ -81,7 +81,8 @@ const update = async(user, request) => {
 
     return prismaClient.post.update({
         where : {
-            id : post.id
+            id : post.id,
+            profile_id : profileId.id
         },
         data : {
             title : post.title,
@@ -114,7 +115,8 @@ const remove = async (user, postId) => {
 
     return prismaClient.post.delete({
         where : {
-            id : postId
+            id : postId,
+            profile_id : profileId.id
         }
     })
 }
@@ -201,17 +203,18 @@ const getAllPost = async (request) => {
     }
 }
 
+const getAllPostUser = async(profileId) => {
+    profileId = validate(getPostValidation, profileId)
+    
+    const posts = await prismaClient.post.findMany({
+        where : {
+            profile_id : profileId
+        }
+    })
 
-// const getAllPost = async() => {
-//     const allPost = await prismaClient.post.findMany({
-//         select : {
-//             title :true,
-//             content :true,
-//             image: true,
-//         }
-//     })
-//     return allPost
-// }
+    return posts
+}
+
 
 export default{
     create,
@@ -219,5 +222,6 @@ export default{
     update,
     remove,
     search,
-    getAllPost
+    getAllPost,
+    getAllPostUser
 }

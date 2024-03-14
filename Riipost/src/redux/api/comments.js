@@ -1,11 +1,13 @@
 import axios from "axios";
 import {  getComment } from "../slices/commentSlice";
 
+const baseUrl = import.meta.env.VITE_BASE_URL
+
 export const getComments = (token, id) => {
   return async (dispatch) => {
     try {
       const result = await axios.get(
-        `http://localhost:3000/api/posts/${id}/comments`,
+        `${baseUrl}api/posts/${id}/comments`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -25,7 +27,7 @@ export const createComment = (token, id, data) => {
   return async (dispatch) => {
     try {
       const result = await axios.post(
-        `http://localhost:3000/api/posts/${id}/comments`,
+        `${baseUrl}api/posts/${id}/comments`,
         {
           body: data,
         },
@@ -47,7 +49,7 @@ export const removeComment = (token, postId, commentId) => {
   return async(dispatch, getState) => {
     try {
       await axios.delete(
-        `http://localhost:3000/api/posts/${postId}/comments/${commentId}`,
+        `${baseUrl}api/posts/${postId}/comments/${commentId}`,
         {
           headers: {
             "Content-Type": "application/json",

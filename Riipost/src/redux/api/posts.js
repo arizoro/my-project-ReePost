@@ -1,11 +1,12 @@
 import axios from "axios";
-import { addPage, getDetail, getPosts, minPage } from "../slices/postsSlice";
-// const token = window.localStorage.getItem('token')
+import { getDetail, getPosts, postUsers} from "../slices/postsSlice";
+
+const baseUrl = import.meta.env.VITE_BASE_URL
 
 export const getPost = (token,query,page) => {
   return async (dispatch) => {
     try {
-      const result = await axios.get(`api/allPost?${query}=${page}`, {
+      const result = await axios.get(`${baseUrl}api/allPost?${query}=${page}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
@@ -18,16 +19,31 @@ export const getPost = (token,query,page) => {
   };
 };
 
+export const getPostById = (token,id) => {
+  return async(dispatch)=> {
+    try {
+      const result = await axios.get(`${baseUrl}api/userPost/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+      dispatch(postUsers(result.data))
+    } catch (error) {
+      console.error(error)
+    }
+  } 
+}
+
 export const getDetailPost = (token, id) => {
   return async(dispatch) => {
     try {
-      const result = await axios.get(`http://localhost:3000/api/posts/${id}`,{
+      const result = await axios.get(`${baseUrl}api/posts/${id}`,{
         headers : {
           "Content-Type" : "application/json",
           Authorization : token
         }
       })
-      console.log(result.data)
       dispatch(getDetail(result.data))
     } catch (error) {
       console.error(error)
@@ -39,7 +55,7 @@ export const createdPost = (token , formData) => {
   return async(dispatch) => {
     try {
       await axios.post(
-        "http://localhost:3000/api/posts",
+        `${baseUrl}api/posts`,
         formData,
         {
           headers: {
@@ -56,10 +72,30 @@ export const createdPost = (token , formData) => {
   }
 }
 
+export const updatedPost = (token, id, formData) => {
+  return async(dispatch) => {
+    try {
+      const result = await axios.put(`${baseUrl}api/posts/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
+            Authorization: token,
+          },
+        }
+      )
+      dispatch(getDetail(result.data))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
+
 export const removePost = (token, id) => {
   return async(dispatch,getState) => {
     try {
-      await axios.delete(`http://localhost:3000/api/posts/${id}`,
+      await axios.delete(`${baseUrl}api/posts/${id}`,
       {
         headers : {
           "Content-Type" : "application/json",
@@ -67,10 +103,6 @@ export const removePost = (token, id) => {
         }
       })
       dispatch(getPost(token))
-      // console.log(getState())
-      // const posts = getState().posts.data.data
-      // const post = posts.filter((post) => post.id != id)
-      // dispatch(getPosts(post))
 
     } catch (error) {
       console.error(error)

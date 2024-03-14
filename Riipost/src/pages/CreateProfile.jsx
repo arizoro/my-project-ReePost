@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { createUserProfile } from "../redux/api/user";
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreateProfile = () => {
   const token = window.localStorage.getItem('token')
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [image, setImage] = useState(null);
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
   const userProfile = useSelector((state) => state.profile.profile?.data)
@@ -24,13 +26,14 @@ const CreateProfile = () => {
     dispatch(createUserProfile(token, formData))
   };
 
+  useEffect(()=> {
+    if(userProfile){
+      navigate('/')
+    }
+  },userProfile)
+
   return (
-    <>
-    {
-      userProfile 
-      ?
-      <Navigate to='/' />
-    : 
+    <> 
     <div className="w-full h-screen ">
       <div className="flex justify-center items-center mt-10">
         <div className="rounded border-2 border-black">
@@ -82,7 +85,6 @@ const CreateProfile = () => {
         </div>
       </div>
     </div>
-    }
     </>
   );
 };

@@ -2,14 +2,11 @@ import { prismaClient } from "../application/database.js"
 import postService from "../service/postService.js"
 import fs from 'fs-extra'
 
-const url = 'http://localhost:3000/image/'
-
 const create = async(req, res, next) => {
     try {
         const user = req.user
         const request = req.body
         request.image = req.file?.filename
-
 
         const result = await postService.create(user, request)
         console.log(result)
@@ -57,7 +54,7 @@ const update = async(req, res, next)=> {
         if(result.image){
             fs.unlink(`assets/images/${old_image}`)
         }
-        result.image = `${url}${result.image}`
+        // result.image = `${url}${result.image}`
         res.status(200).json({
             data: result
         })
@@ -70,7 +67,6 @@ const remove = async(req, res, next) => {
     try {
         const user = req.user
         const posId = req.params.postId
-
 
         const result = await postService.remove(user, posId)
         if(result.image){
@@ -122,6 +118,18 @@ const getAllPost = async(req,res,next) => {
     }
 }
 
+const getAllPostUser = async(req, res, next)=> {
+    try {
+        const profileId = req.params.profileId
+        const result = await postService.getAllPostUser(profileId)
+        res.status(200).json({
+            data : result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 
 export default{
     create,
@@ -129,5 +137,6 @@ export default{
     update,
     remove,
     search,
-    getAllPost
+    getAllPost,
+    getAllPostUser
 }

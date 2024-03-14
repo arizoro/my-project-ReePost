@@ -38,6 +38,27 @@ const get = async(user) => {
     return profile
 }
 
+const getDetail = async(profileId) => {
+    profileId = validate(getProfileValidation, profileId) ;
+    const profile = await prismaClient.profile.findFirst({
+        where : {
+            id : profileId
+        },
+        select : {
+            id : true,
+            first_name: true,
+            last_name: true,
+            image : true,
+        }
+    })
+
+    if(!profile){
+        throw new RessponseError(404, "User profile is not found")
+    }
+
+    return profile
+}
+
 const getAllProfile = async() => {
     return prismaClient.profile.findMany({
         select : {
@@ -83,6 +104,7 @@ const update = async(user,request) => {
 export default {
     create,
     get,
+    getDetail,
     update,
     getAllProfile
 }

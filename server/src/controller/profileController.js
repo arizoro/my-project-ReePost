@@ -10,7 +10,7 @@ const create = async(req,res,next) => {
         const user = req.user
         request.image = req.file?.filename
         const result = await profileService.create(user,request)
-        result.image = `${url}${result.image}`
+        // result.image = `${url}${result.image}`
 
         res.status(200).json({
             data : result
@@ -25,7 +25,20 @@ const get = async(req, res, next) => {
     try {
         const user = req.user
         const result = await profileService.get(user)
-        result.image = `${url}${result.image}`
+        // result.image = `${url}${result.image}`
+        res.status(200).json({
+            data : result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getDetail = async(req, res, next) => {
+    try {
+        const profileId = req.params.profileId
+        const result = await profileService.getDetail(profileId)
+        // result.image = `${url}${result.image}`
         res.status(200).json({
             data : result
         })
@@ -65,7 +78,7 @@ const update = async(req,res,next) => {
         
         if(result.image){
             fs.unlink(`assets/images/${old_image}`)
-            result.image = `${url}${result.image}`
+            // result.image = `${url}${result.image}`
         }
 
         res.status(200).json({
@@ -79,6 +92,7 @@ const update = async(req,res,next) => {
 export default {
     create,
     get,
+    getDetail,
     update,
     getAllProfile
 }

@@ -17,7 +17,7 @@ const updatePostValidation =  Joi.object({
 
 const searchPostValidation = Joi.object({
     page :Joi.number().positive().min(1).default(1) ,
-    size :Joi.number().positive().max(100).min(1).default(10),
+    size :Joi.number().positive().max(100).min(1).default(5),
     id : Joi.number().positive().optional(),
     title : Joi.string().max(255).optional(),
     content : Joi.string().optional(),

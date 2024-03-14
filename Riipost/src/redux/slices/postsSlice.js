@@ -1,7 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, isPending } from "@reduxjs/toolkit";
 
 const initialState = {
     data : [],
+    postUser: [],
     post: [],
     pages : []
 }
@@ -11,6 +12,9 @@ const postsSlice = createSlice({
     reducers : {
         getPosts : (state,action) => {
             state.data = action.payload
+        },
+        postUsers : (state, action) => {
+            state.postUser = action.payload
         },
         getDetail : (state, action) => {
             state.post = action.payload
@@ -44,5 +48,5 @@ const postsSlice = createSlice({
     }
 })
 
-export const {getPosts, addPage ,minPage, getDetail} = postsSlice.actions
+export const {getPosts, addPage ,minPage, getDetail, postUsers} = postsSlice.actions
 export default postsSlice.reducer

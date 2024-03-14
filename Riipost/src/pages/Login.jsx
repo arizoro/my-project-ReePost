@@ -1,19 +1,23 @@
 import { useState, useEffect } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { login } from '../redux/api/auth'
 import { useSelector } from 'react-redux'
 import { getUserProfile } from '../redux/api/user'
+import { useNavigate } from 'react-router-dom'
+import Loading from '../components/utils/Loading'
+
 
 const Login = () => {
   const token = window.localStorage.getItem('token')
   const isLogin = useSelector((state) => state.auth.login)
-  const userProfile = useSelector((state) => state.profile.profile.data)
-
-
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate()
+
   const [msg, setMsg] = useState('')
 
   const dispatch = useDispatch()
@@ -25,21 +29,30 @@ const Login = () => {
   const handleSubmit = async(e) => {
     e.preventDefault()
     dispatch(login(data))
-
-    if(isLogin){
-      setMsg('Email or password failed')
-    }
+    setTimeout(()=> {
+      if(isLogin === false){
+        setMsg('Email or password failed')
+      }
+    },500)
   }
+
   
   useEffect(()=> {
-    if(token || userProfile){
+    if(token){
+      setLoading(true)
       dispatch(getUserProfile(token))
+      setTimeout(()=> {
+        setLoading(false)
+        navigate('/')
+      },800)
     }
   },[token])
 
   return (
     <>
-    { !token ? 
+    {
+      loading ? <Loading/> 
+      :
       <div className='w-full h-screen'>
       <div className='flex justify-center items-center'>
         <div className='rounded bg-slate-700 my-48'>
@@ -65,9 +78,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-    :
-    <Navigate to='/' />
-    } 
+    }
     </>
     )
   }

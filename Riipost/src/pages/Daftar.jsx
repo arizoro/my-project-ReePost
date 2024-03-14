@@ -1,13 +1,16 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { createdUser } from "../redux/api/user";
+import { useSelector, useDispatch } from "react-redux";
 
 const Daftar = () => {
+  const dispatch = useDispatch()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
-  const [create , setCreate] = useState(false)
+
+  const created = useSelector((state)=> state.users.user)
 
   const data = {
     username : username, 
@@ -17,17 +20,7 @@ const Daftar = () => {
 
   async function handleSubmit(e){
     e.preventDefault()
-
-    const daftar =  await axios.post('http://localhost:3000/api/users',
-    data ,
-    {
-      headers : {
-        "Content-Type" : "application/json"
-      }
-    })
-    if(daftar){
-      setCreate(true)
-    }
+    dispatch(createdUser(data))
 
     setUsername('')
     setEmail('')
@@ -41,7 +34,7 @@ const Daftar = () => {
       <div className='rounded bg-slate-700 my-48'>
         <div className='  p-4 flex flex-col justify-center'>
           {
-            create ? <h1 className="text-center text-white p-2">Akun berhasil dibuat</h1> : null
+            created ? <h1 className="text-center text-white p-2">Akun berhasil dibuat</h1> : null
           }
         <form action="submit" encType="multipart/form-data" onSubmit={handleSubmit} className='flex flex-col justify-center w-80'>
           <div className='mb-3 flex flex-col'>

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Dropdown from "./Dropdown";
 import nonprofile from "../../assets/nonprofile.png";
 import { useSelector } from "react-redux";
+const imgURL = import.meta.env.VITE_IMAGE_URL;
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +32,9 @@ const Navbar = () => {
           <Link to="/" className=" text-white text-xl font-bold italic">
             RiiPost
           </Link>
+          {
+            userProfile 
+            ? 
           <div className="flex flex-start">
             <input
               onChange={handleSearch}
@@ -47,11 +51,14 @@ const Navbar = () => {
               />
             </button>
           </div>
+          : 
+          null
+          }
           <div className="flex justify-start items-center cursor-pointer ">
-            {userProfile ? (
+            {userProfile ? 
               <>
                 <img
-                  src={!userProfile.image ? nonprofile : userProfile.image}
+                  src={!userProfile?.image ? nonprofile : `${imgURL}${userProfile?.image}` }
                   alt="img"
                   className="rounded-full object-cover object-top w-8 h-8"
                 />
@@ -69,11 +76,11 @@ const Navbar = () => {
                   <CaretDown size={20} />
                 </button>
               </>
-            ) : (
+            : 
               <button  className="bg-white p-1 rounded w-16 hover:text-blue-900 font-semibold">
                 Login
               </button>
-            )}
+            }
           </div>
         </div>
       </div>

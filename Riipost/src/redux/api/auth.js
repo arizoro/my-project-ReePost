@@ -1,13 +1,14 @@
 import axios from "axios";
-import { loginUser, logOut } from "../slices/authSlice";
-import { getUser } from "../slices/profileSlice";
+import { loginUser } from "../slices/authSlice";
 import { persistor } from "../store/store";
+
+const baseUrl = import.meta.env.VITE_BASE_URL
 
 export const login = (data) => {
   return async (dispatch, getState) => {
     try {
       const result = await axios.post(
-        `http://localhost:3000/api/users/login`,
+        `${baseUrl}api/users/login`,
         data,
         {
           headers: {
@@ -29,7 +30,7 @@ export const login = (data) => {
 export const userLogOut = (token) => {
   return async (dispatch) => {
     try {
-      await axios.delete("api/users/current", {
+      await axios.delete(`${baseUrl}api/users/current`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,

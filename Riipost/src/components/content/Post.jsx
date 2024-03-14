@@ -1,12 +1,24 @@
 import { Link } from "react-router-dom";
-import PostButton from "./PostBox";
-const baseUrl = import.meta.env.VITE_API_URL
+import PostButton from "./PostButton";
+import { useState } from "react";
+import { DotsThreeVertical } from "@phosphor-icons/react";
 
-const Post = ({ post, token, imgURL, isOpen }) => {
+const Post = ({ post, imgURL, token, user }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpen = () => {
+    setIsOpen((open) => !open);
+  };
   return (
     <div className="my-4 w-full">
       <div className="flex justify-between ">
         {post?.image ? <img src={`${imgURL}${post.image}`} alt="img" /> : null}
+        {
+          user?.id == post?.profile_id ?
+        <button onClick={handleOpen} className=" h-0 ">
+          <DotsThreeVertical size={24} />
+        </button> :null
+        }
         <PostButton token={token} id={post?.id} isOpen={isOpen} />
       </div>
 
@@ -17,7 +29,6 @@ const Post = ({ post, token, imgURL, isOpen }) => {
         {post?.title}
       </Link>
       <p className="mt-2">{post?.content}</p>
-      <span>Base URL : {baseUrl}</span>
     </div>
   );
 };

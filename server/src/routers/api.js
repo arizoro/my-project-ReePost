@@ -21,6 +21,7 @@ userApi.delete('/api/users/current', userController.logout)
 // profile
 userApi.post('/api/users/profile',upload.single('image'), profileController.create)
 userApi.get('/api/users/profile', profileController.get)
+userApi.get('/api/users/profile/:profileId', profileController.getDetail)
 userApi.get('/api/users/allProfile', profileController.getAllProfile)
 userApi.patch('/api/users/profile/:profileId',upload.single('image'), profileController.update)
 
@@ -31,6 +32,7 @@ userApi.put('/api/posts/:postId',upload.single('image'), postController.update)
 userApi.delete('/api/posts/:postId', postController.remove)
 userApi.get('/api/posts', postController.search)
 userApi.get('/api/allPost', postController.getAllPost)
+userApi.get('/api/userPost/:profileId', postController.getAllPostUser)
 
 // Comment Api
 userApi.post('/api/posts/:postId/comments', commentController.create)

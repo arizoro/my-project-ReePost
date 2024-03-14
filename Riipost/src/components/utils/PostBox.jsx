@@ -7,8 +7,8 @@ const PostBox = () => {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
   const [content, setContent] = useState("");
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const handleImage = (e) => {
     setImage(e.target.files[0]);
   };
@@ -29,6 +29,7 @@ const PostBox = () => {
     setImage(null);
   };
 
+
   return (
     <div className="mt-4 flex justify-center items-center flex-col w-full">
       <form
@@ -40,7 +41,7 @@ const PostBox = () => {
           <input
             type="text"
             value={title}
-            className="h-8 border border-black p-2"
+            className="h-8 border border-black p-6"
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
@@ -57,8 +58,8 @@ const PostBox = () => {
         <div className="flex flex-col ">
           <label className="text-xl font-bold ">Content</label>
           <textarea
+            value={ content}
             onChange={(e) => setContent(e.target.value)}
-            value={content}
             className=" h-24 border border-black p-2"
           ></textarea>
         </div>

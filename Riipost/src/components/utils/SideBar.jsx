@@ -1,5 +1,7 @@
 import { House, MagnifyingGlass, Star, Gear } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
+import nonprofile from "../../assets/nonprofile.png"
+const imgURL = import.meta.env.VITE_IMAGE_URL;
 
 const SideBar = ({ user }) => {
   return (
@@ -9,7 +11,7 @@ const SideBar = ({ user }) => {
     >
       <Link to="/profile" className="px-4 p-4 flex justify-start items-center ">
         <img
-          src={user?.image}
+          src={!user?.image ? nonprofile : `${imgURL}${user?.image}`}
           width={350}
           height={350}
           alt="img"

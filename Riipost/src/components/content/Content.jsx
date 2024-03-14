@@ -1,20 +1,11 @@
-import { DotsThreeVertical } from "@phosphor-icons/react";
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import noneProfile from "../../assets/nonprofile.png"
+import noneProfile from "../../assets/nonprofile.png";
 
 import Post from "./Post";
 
-const imgURL = "http://localhost:3000/image/";
+const imgURL = import.meta.env.VITE_IMAGE_URL;
 
 const Content = ({ post, users }) => {
-  const token = window.localStorage.getItem('token')
-  const [isOpen, setIsOpen] = useState(false);
-  
-
-  const handleOpen = () => {
-    setIsOpen((open) => !open);
-  };
 
 
   return (
@@ -27,13 +18,13 @@ const Content = ({ post, users }) => {
                 return (
                   <div key={i} className="flex justify-between">
                     <Link
-                      to="/profile"
+                      to={`/profile/${user?.id}`}
                       className="flex justify-center items-center"
                     >
                       <img
                         src={
                           !user?.image
-                            ? { noneProfile }
+                            ?  noneProfile
                             : `${imgURL}${user?.image}`
                         }
                         alt="img"
@@ -43,16 +34,11 @@ const Content = ({ post, users }) => {
                         {user?.first_name} {user?.last_name}
                       </h1>
                     </Link>
-                    <button className=" flex justify-end" onClick={handleOpen}>
-                      <DotsThreeVertical size={26} />
-                    </button>
                   </div>
                 );
               }
             })}
-            <Post post={post} token={token} imgURL={imgURL} isOpen={isOpen} />
-
-
+            <Post post={post} imgURL={imgURL} />
           </div>
         </div>
       </div>

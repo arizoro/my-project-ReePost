@@ -1,11 +1,30 @@
 import axios from "axios";
-import { getAllUser } from "../slices/usersSlice";
-import { createUser, getUser } from "../slices/profileSlice";
+import { getAllUser, setUser } from "../slices/usersSlice";
+import { createUser, getUser, setProfileId } from "../slices/profileSlice";
+
+const baseUrl = import.meta.env.VITE_BASE_URL
+
+export const createdUser = (data) => {
+  return async(dispatch)=> {
+    try {
+      await axios.post(`${baseUrl}api/users`,
+      data ,
+    {
+      headers : {
+        "Content-Type" : "application/json"
+      }
+    })
+    dispatch(setUser())
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
 
 export const getUserProfile = (token) => {
   return async (dispatch) => {
     try {
-      const result = await axios.get("http://localhost:3000/api/users/profile", {
+      const result = await axios.get(`${baseUrl}api/users/profile`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
@@ -19,10 +38,27 @@ export const getUserProfile = (token) => {
   };
 };
 
+export const getUserProfileById = (token,id) => {
+  return async (dispatch) => {
+    try {
+      const result = await axios.get(`${baseUrl}api/users/profile/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+      dispatch(setProfileId(result.data))
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
 export const getAllUsersProfile = (token) => {
   return async(dispatch) => {
     try {
-      const result = await axios.get('api/users/allProfile',{
+      const result = await axios.get(`${baseUrl}api/users/allProfile`,{
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
@@ -39,7 +75,7 @@ export const createUserProfile = (token, formData) => {
   return async(dispatch) => {
     try {
       const result = await axios.post(
-        "http://localhost:3000/api/users/profile",formData,
+        `${baseUrl}api/users/profile`,formData,
         {
           headers: {
             "Content-Type": "application/json",

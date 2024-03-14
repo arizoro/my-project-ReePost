@@ -9,18 +9,21 @@ import { getDetailPost } from "../../redux/api/posts";
 import { getComments } from "../../redux/api/comments";
 import BoxComment from "../utils/BoxComment";
 
+const imgURL = import.meta.env.VITE_IMAGE_URL;
+
 const DetailPost = () => {
   const params = useParams();
   const token = window.localStorage.getItem('token');
   const dispatch = useDispatch()
   const post = useSelector((state) => state.posts?.post?.data)
-  const user = useSelector((state) => state.profile.profile?.data)
   const comments = useSelector((state) => state.comments?.data)
+  const allUsersProfile = useSelector((state) => state.users?.users)
+
 
   useEffect(() => {
     dispatch(getComments(token, params.id))
     dispatch(getDetailPost(token, params.id));
-  }, [dispatch,comments.length]);
+  }, [dispatch,comments.length, params.id]);
 
   return (
     <>
@@ -32,23 +35,27 @@ const DetailPost = () => {
               className="flex justify-center items-center absolute left-8 "
             >
               <img
-                src={!user?.image ? { noneProfile } : `${user?.image}`}
+                src={!post?.profile?.image ?  noneProfile : `${imgURL}${post?.profile?.image}`}
                 alt="img"
                 className="rounded-full w-12 h-12"
               />
               <h1 className="mx-2 font-bold text-2xl underline">
-                {user?.first_name} {user?.last_name}
+                {post?.profile?.first_name} {post?.profile?.last_name}
               </h1>
             </Link>
 
             <div className="flex flex-col justify-center mt-6">
               <Content post={post} />
+              {
+                !post ? null 
+                :
+                
+                <div className=" flex justify-center items-center">
+                <BoxComment token={token} id={params.id} />
+                </div>
+              }
 
-              <div className=" flex justify-center items-center">
-              <BoxComment token={token} id={params.id} />
               </div>
-            </div>
-
             <div className="flex flex-col w-8/12 gap-2 "  >
               <h1 className="text-xl font-bold mb-4 underline mx-8">Commentar</h1>
               {comments?.data?.map((comment, i) => {
@@ -57,7 +64,7 @@ const DetailPost = () => {
                     key={i}
                     comment={comment}
                     postId={params.id}
-                    user={user}
+                    users={allUsersProfile}
                   />
                 );
               })}

@@ -9,8 +9,8 @@ import { PersistGate} from 'redux-persist/integration/react'
 import Loading from './components/utils/Loading.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <Provider store={store} >
-      <PersistGate loading={<Loading/>} persistor={persistor}>
+    <Provider store={store}>
+      <PersistGate loading={ <Loading/> } persistor={persistor}>
     <BrowserRouter>
       <AuthProvider>
         <Routes>

@@ -1,9 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, isPending } from "@reduxjs/toolkit";
 
 
 
 const initialState = {
-    users : []
+    users : [],
+    user : false
 }
 
 const usersSlice = createSlice({
@@ -13,8 +14,12 @@ const usersSlice = createSlice({
         getAllUser : (state,action) => {
             state.users = action.payload
         },
-    } 
+        setUser : (state, action) => {
+            state.user = true
+        }
+    }
 })
 
-export const { getAllUser} = usersSlice.actions
+
+export const { getAllUser, setUser} = usersSlice.actions
 export default usersSlice.reducer
