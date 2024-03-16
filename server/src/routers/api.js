@@ -31,7 +31,6 @@ userApi.get('/api/posts/:postId', postController.get)
 userApi.put('/api/posts/:postId',upload.single('image'), postController.update)
 userApi.delete('/api/posts/:postId', postController.remove)
 userApi.get('/api/posts', postController.search)
-userApi.get('/api/allPost', postController.getAllPost)
 userApi.get('/api/userPost/:profileId', postController.getAllPostUser)
 
 // Comment Api

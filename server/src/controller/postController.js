@@ -37,21 +37,25 @@ const update = async(req, res, next)=> {
         const user = req.user
         const request = req.body
         request.id = req.params.postId
-        if(request.image){
-            request.image = req.file?.filename
-        }
-
+        
         const post = await prismaClient.post.findFirst({
             where : {
                 id : parseInt(request.id)
             }
         })
-        
         const old_image = post.image
-
+        
+        if(request.image == old_image ){
+            request.image = old_image
+        }else{
+            request.image = req.file?.filename
+        }
+        
+        
         const result = await postService.update(user, request)
-
+        
         if(result.image){
+            if(result.image === old_image) return
             fs.unlink(`assets/images/${old_image}`)
         }
         // result.image = `${url}${result.image}`
@@ -73,7 +77,7 @@ const remove = async(req, res, next) => {
             fs.unlink(`assets/images/${result.image}`)
         }
         res.status(200).json({
-            data: 'ok'
+            data: result
         })
     } catch (error) {
         next(error)
@@ -82,7 +86,6 @@ const remove = async(req, res, next) => {
 
 const search = async (req, res, next) => {
     try {
-        const user = req.user
         const request = {
             id : req.query.id,
             title : req.query.title,
@@ -91,32 +94,16 @@ const search = async (req, res, next) => {
             size : req.query.size
         }
 
-        const result = await postService.search(user, request)
+        const result = await postService.search( request)
         res.status(200).json({
             data: result.data,
-            paging: result.pagging
+            pagging: result.pagging
         })
     } catch (error) {
         next(error)
     }
 }
 
-const getAllPost = async(req,res,next) => {
-    try {
-        const request = {
-            page : req.query.page,
-            size : req.query.size
-            }
-
-        const result = await postService.getAllPost(request)
-        res.status(200).json({
-            data : result.data,
-            pagging : result.pagging
-        })
-    } catch (error) {
-        next(error)
-    }
-}
 
 const getAllPostUser = async(req, res, next)=> {
     try {
@@ -137,6 +124,5 @@ export default{
     update,
     remove,
     search,
-    getAllPost,
     getAllPostUser
 }

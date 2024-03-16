@@ -61,10 +61,10 @@ const Profile = () => {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-3 px-4">
-          {posts.data?.map((post, i) => {
+          {posts.data?.map((post) => {
             return (
               <div
-                key={i}
+                key={post.id}
                 className=" px-4 my-8 flex justify-center items-center bg-slate-300 rounded-md"
               >
                 <div className=" w-4/6  ">

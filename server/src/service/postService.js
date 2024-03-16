@@ -121,16 +121,12 @@ const remove = async (user, postId) => {
     })
 }
 
-const search = async(user, request) => {
-    const profileId = await profileUser(user)
+const search = async(request) => {
     request = validate(searchPostValidation , request)
 
     const skip = (request.page - 1) * request.size
     const filters = []
 
-    filters.push({
-        profile_id : profileId.id
-    })
 
     if(request.id){
         filters.push({
@@ -159,9 +155,7 @@ const search = async(user, request) => {
     const filterPost = await prismaClient.post.findMany({
         where : {
             AND : filters
-        },
-        take : request.size,
-        skip : skip
+        }
     })
 
     const totalItems = await prismaClient.post.count({
@@ -169,30 +163,9 @@ const search = async(user, request) => {
             AND : filters
         }
     })
-
-    return {
-        data : filterPost,
-        pagging : {
-            page : request.page,
-            total_items : totalItems,
-            total_page : Math.ceil(totalItems / request.size)
-        }
-    }
-
-}
-
-const getAllPost = async (request) => {
-    request = validate(searchPostValidation , request)
-    const skip = (request.page - 1) * request.size
-
-    const result = await prismaClient.post.findMany()
-    const sorting = result.sort((a,b) => new Date(b.created_at) - new Date(a.created_at) )
-    const totalItems = await prismaClient.post.count()
-
+    const sorting = filterPost.sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at) )
     const slice = sorting.slice(skip , (request.page * request.size))
 
-
-    console.log(totalItems , '<<<<< items')
     return {
         data : slice,
         pagging : {
@@ -201,7 +174,9 @@ const getAllPost = async (request) => {
             total_page : Math.ceil(totalItems / request.size)
         }
     }
+
 }
+
 
 const getAllPostUser = async(profileId) => {
     profileId = validate(getPostValidation, profileId)
@@ -222,6 +197,5 @@ export default{
     update,
     remove,
     search,
-    getAllPost,
     getAllPostUser
 }

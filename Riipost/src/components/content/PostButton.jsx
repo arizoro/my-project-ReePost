@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const PostButton = ({ token, id, isOpen }) => {
   const dispatch = useDispatch();
+  
   return (
     <>
       {isOpen ? (

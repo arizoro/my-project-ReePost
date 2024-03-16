@@ -3,10 +3,10 @@ import { getDetail, getPosts, postUsers} from "../slices/postsSlice";
 
 const baseUrl = import.meta.env.VITE_BASE_URL
 
-export const getPost = (token,query,page) => {
+export const getPost = (token,query,value) => {
   return async (dispatch) => {
     try {
-      const result = await axios.get(`${baseUrl}api/allPost?${query}=${page}`, {
+      const result = await axios.get(`${baseUrl}api/posts?${query}=${value}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
@@ -73,7 +73,7 @@ export const createdPost = (token , formData) => {
 }
 
 export const updatedPost = (token, id, formData) => {
-  return async(dispatch) => {
+  return async(dispatch, getState) => {
     try {
       const result = await axios.put(`${baseUrl}api/posts/${id}`,
         formData,
@@ -85,7 +85,8 @@ export const updatedPost = (token, id, formData) => {
           },
         }
       )
-      dispatch(getDetail(result.data))
+      console.log(getState().posts.postUser)
+      dispatch(getPostById(token,id))
     } catch (error) {
       console.error(error)
     }
@@ -102,10 +103,14 @@ export const removePost = (token, id) => {
           Authorization : token
         }
       })
-      dispatch(getPost(token))
+      const posts = getState().posts.postUser.data
+      const post = posts.filter((post) => post.id != id)
+      
+      dispatch(postUsers({data : post}))
 
     } catch (error) {
       console.error(error)
     }
   }
 }
+
