@@ -6,10 +6,13 @@ const PostBox = () => {
   const token = window.localStorage.getItem("token");
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
+  const [prevImage, setPrevImage] = useState(null)
   const [content, setContent] = useState("");
 
   const dispatch = useDispatch();
   const handleImage = (e) => {
+    const upload = URL.createObjectURL(e.target.files[0])
+    setPrevImage(upload)
     setImage(e.target.files[0]);
   };
 
@@ -47,6 +50,11 @@ const PostBox = () => {
         </div>
 
         <div className="flex flex-col ">
+        {
+            prevImage ? 
+            <img src={prevImage} alt="" className=" w-28 h-28 bg-cover object-contain my-2 " />
+            : null
+          }
           <input
             className="mt-1"
             type="file"

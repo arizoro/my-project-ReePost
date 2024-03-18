@@ -17,13 +17,16 @@ const UpdatePost = () => {
 
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
+  const [prevImage, setPrevImage] = useState(null)
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const handleImage = (e) => {
-    setImage(e.target.files[0]);
-    console.log(e.target.files[0]);
+    const upload = URL.createObjectURL(e.target.files[0])
+    console.log(upload);
+    setPrevImage(upload);
+    setImage(e.target.files[0])
   };
 
   const formData = new FormData();
@@ -49,7 +52,7 @@ const UpdatePost = () => {
     setTimeout(() => {
       setTitle(post?.title);
       setContent(post?.content);
-      setImage(post?.image)
+      setPrevImage(`${imgURL}${post?.image}`)
       setLoading(false);
     }, 1000);
   }, [dispatch, post?.id]);
@@ -73,7 +76,7 @@ const UpdatePost = () => {
 
             <div className="flex flex-col ">
               <img
-                src={`${imgURL}${post?.image}`}
+                src={prevImage}
                 className=" w-96 h-80 bg-cover object-contain "
                 alt="img_post"
               />
