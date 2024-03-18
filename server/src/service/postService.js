@@ -47,6 +47,7 @@ const get = async( postId) => {
             title: true,
             content :true,
             image: true,
+            profile_id: true,
             profile : {
                 select : {
                     first_name :true,

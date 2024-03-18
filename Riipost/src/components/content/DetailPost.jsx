@@ -30,7 +30,7 @@ const DetailPost = () => {
         <div className=" flex justify-center">
           <div className=" flex-col my-8 ">
             <Link
-              to="/profile"
+              to={`/profile/${post?.profile_id}`}
               className="flex justify-center items-center absolute left-8 "
             >
               <img

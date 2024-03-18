@@ -45,6 +45,10 @@ export const getDetailPost = (token, id) => {
         }
       })
       dispatch(getDetail(result.data))
+      scrollTo({
+        behavior: "smooth",
+        top: 20,
+      })
     } catch (error) {
       console.error(error)
     }
