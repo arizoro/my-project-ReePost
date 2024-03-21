@@ -1,6 +1,6 @@
 class RessponseError extends Error {
-    constructor(status, massage){
-        super(massage),
+    constructor(status, message){
+        super(message),
         this.status = status
     }
 }
@@ -8,3 +8,4 @@ class RessponseError extends Error {
 export {
     RessponseError
 }
+
